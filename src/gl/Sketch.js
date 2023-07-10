@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import baseVert from './shaders/base.vert'
 import baseFrag from './shaders/base.frag'
@@ -23,16 +22,7 @@ class Sketch {
         this.container.appendChild(this.renderer.domElement)
 
         // Camera
-        this.camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000)
-        // this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1)
-        this.camera.position.z = 5
-
-        // Scene
-        this.scene = new THREE.Scene()
-
-        // Controls
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement)
-        this.controls.enableDamping = true
+        this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1)
 
         // Clock
         this.clock = new THREE.Clock()
@@ -41,16 +31,18 @@ class Sketch {
     }
 
     init() {
-        this.createMesh()
+        this.createQuad() // fullscreen quad to show final texture(s)
         this.addEvents()
     }
 
-    createMesh() {
+    createQuad() {
         let geometry = new THREE.PlaneGeometry(2, 2)
-        let material = new THREE.MeshNormalMaterial()
+        let material = new THREE.ShaderMaterial({
+            vertexShader: baseVert,
+            fragmentShader: baseFrag,
+        })
 
-        this.mesh = new THREE.Mesh(geometry, material)
-        this.scene.add(this.mesh)
+        this.quad = new THREE.Mesh(geometry, material)
     }
 
     addEvents() {
@@ -65,9 +57,9 @@ class Sketch {
     }
 
     render() {
-        this.controls.update()
-
-        this.renderer.render(this.scene, this.camera)
+        this.renderer.setRenderTarget(null)
+        this.renderer.clear()
+        this.renderer.render(this.quad, this.camera) // straight render the mesh instead of a scene
     }
 }
 
