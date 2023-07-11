@@ -35,7 +35,7 @@ class Sketch {
 
     init() {
         this.createScenes()
-        this.createQuad() // fullscreen quad to show final texture(s)
+        this.createMesh() // fullscreen quad to show final texture(s)
         this.addEvents()
     }
 
@@ -49,7 +49,7 @@ class Sketch {
         this.scene2.add(ico)
     }
 
-    createQuad() {
+    createMesh() {
         let geometry = new THREE.PlaneGeometry(2, 2)
         let material = new THREE.ShaderMaterial({
             vertexShader: baseVert,
