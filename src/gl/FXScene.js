@@ -44,6 +44,8 @@ class FXScene extends THREE.Scene {
     }
 
     render(rtt) {
+        // If you want to see the feedback effect work
+        // set the color alpha to 0
         this.renderer.setClearColor(this.clearColor, 0)
 
         if (rtt) {
