@@ -4,15 +4,15 @@ uniform sampler2D tDiffuse2;
 varying vec2 vUv;
 
 void main() {
-    vec4 texture1 = texture2D(tDiffuse1, vUv);
-    vec4 texture2 = texture2D(tDiffuse2, vUv);
+    vec4 texel1 = texture2D(tDiffuse1, vUv);
+    vec4 texel2 = texture2D(tDiffuse2, vUv);
 
     float x = step(0.5, vUv.x);
 
     vec4 color;
 
-    // color = mix(texture1, texture2, x);
-    color = min(texture1, texture2);
+    // color = mix(texel1, texel2, x);
+    color = min(texel1, texel2);
 
     gl_FragColor = color;
 }
