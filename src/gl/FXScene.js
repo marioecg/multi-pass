@@ -3,10 +3,11 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 import store from '../store'
 
-class FXScene {
+class FXScene extends THREE.Scene {
     constructor(renderer) {
+        super()
+
         this.renderer = renderer
-        this.scene = new THREE.Scene()
 
         this.camera = new THREE.PerspectiveCamera(45, store.width / store.height, 0.1, 100)
         this.camera.position.set(0, 0, 5)
@@ -28,16 +29,12 @@ class FXScene {
         )
     }
 
-    add(object) {
-        this.scene.add(object)
-    }
-
     update(t) {
         this.controls.update()
 
         let tScale = 0.5
 
-        this.scene.children.forEach(child => {
+        this.children.forEach(child => {
             if (child instanceof THREE.Mesh) {
                 child.rotation.x = t * tScale * this.direction.x
                 child.rotation.y = t * tScale * this.direction.y
@@ -47,15 +44,15 @@ class FXScene {
     }
 
     render(rtt) {
-        this.renderer.setClearColor(this.clearColor)
+        this.renderer.setClearColor(this.clearColor, 0)
 
         if (rtt) {
             this.renderer.setRenderTarget(this.fbo)
             this.renderer.clear()
-            this.renderer.render(this.scene, this.camera)
+            this.renderer.render(this, this.camera)
         } else {
             this.renderer.setRenderTarget(null)
-            this.renderer.render(this.scene, this.camera)
+            this.renderer.render(this, this.camera)
         }
     }
 }

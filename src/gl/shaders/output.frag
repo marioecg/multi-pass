@@ -9,7 +9,10 @@ void main() {
 
     float x = step(0.5, vUv.x);
 
-    vec4 color = mix(texture1, texture2, x);
+    vec4 color;
+
+    // color = mix(texture1, texture2, x);
+    color = min(texture1, texture2);
 
     gl_FragColor = color;
 }

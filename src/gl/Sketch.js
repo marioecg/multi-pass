@@ -1,10 +1,12 @@
 import * as THREE from 'three'
 
 import baseVert from './shaders/base.vert'
-import baseFrag from './shaders/base.frag'
 import outputFrag from './shaders/output.frag'
 
 import { FXScene } from './FXScene'
+import { Feedback } from './Feedback'
+
+import store from '../store'
 
 class Sketch {
     constructor({
@@ -19,9 +21,10 @@ class Sketch {
         // Renderer
         this.renderer = new THREE.WebGLRenderer({
             antialias: true,
+            alpha: true,
         })
         this.renderer.setSize(width, height)
-        this.renderer.setClearColor(0xffffff, 1.0)
+        this.renderer.setClearColor(0xffffff, 0)
         this.container.appendChild(this.renderer.domElement)
 
         // Camera
@@ -36,17 +39,32 @@ class Sketch {
     init() {
         this.createScenes()
         this.createQuad() // fullscreen quad to show final texture(s)
+        this.createFx() // feedback effect
         this.addEvents()
     }
 
     createScenes() {
         this.scene1 = new FXScene(this.renderer)
         let box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshNormalMaterial())
+        box.scale.setScalar(1.25)
         this.scene1.add(box)
 
         this.scene2 = new FXScene(this.renderer)
         let ico = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 0), new THREE.MeshNormalMaterial())
         this.scene2.add(ico)
+    }
+
+    createFx() {
+        this.target = new THREE.WebGLRenderTarget(
+            store.width * store.pixelRatio,
+            store.height * store.pixelRatio,
+            {
+                type: THREE.FloatType,
+                samples: 8,
+            }
+        )
+
+        this.feedback = new Feedback()
     }
 
     createQuad() {
@@ -87,9 +105,15 @@ class Sketch {
         this.scene2.update(time)
         this.quad.material.uniforms.tDiffuse2.value = this.scene2.fbo.texture
 
-        this.renderer.setRenderTarget(null)
-        this.renderer.clear()
-        this.renderer.render(this.quad, this.camera) // straight render the mesh instead of a scene
+        // this.renderer.setRenderTarget(null)
+        // this.renderer.clear()
+        // this.renderer.render(this.quad, this.camera) // straight render the mesh instead of a scene
+
+        this.renderer.setRenderTarget(this.target)
+        this.renderer.render(this.quad, this.camera)
+
+        this.feedback.passTexture(this.target.texture)
+        this.feedback.render(this.renderer)
     }
 }
 
