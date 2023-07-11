@@ -35,7 +35,7 @@ class Feedback {
     }
 
     createMesh() {
-        // Fullscreen quad where the feedback effects happen
+        // Fullscreen quad where the feedback effects happen and accumulate over time
         let feedbackMaterial = new THREE.ShaderMaterial({
             vertexShader: baseVert,
             fragmentShader: fadeFrag,
@@ -49,8 +49,8 @@ class Feedback {
         let resultMaterial = new THREE.MeshBasicMaterial({ map: null })
         this.resultMesh = new THREE.Mesh(geometry, resultMaterial)
 
-        // Fullscreen quad to copy the texture of a render target
-        // used to receive a texture and "plug" it to the feedback visual effect
+        // Fullscreen quad to copy the texture of a render target,
+        // used to receive a texture and "plug" it to the feedback effect
         let copyMaterial = new THREE.ShaderMaterial({
             vertexShader: baseVert,
             fragmentShader: copyFrag,

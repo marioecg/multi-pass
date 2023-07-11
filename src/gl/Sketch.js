@@ -56,7 +56,7 @@ class Sketch {
     }
 
     createQuad() {
-        // Fullscreen quad that contains the textures from the two scenes
+        // Fullscreen quad that contains the textures with the two scenes
         let geometry = new THREE.PlaneGeometry(2, 2)
         let material = new THREE.ShaderMaterial({
             vertexShader: baseVert,
@@ -105,18 +105,18 @@ class Sketch {
         this.scene1.clearColor = 0xc9ada7
         this.scene1.render(true)
         this.scene1.update(time)
-        this.quad.material.uniforms.tDiffuse1.value = this.scene1.fbo.texture
+        this.quad.material.uniforms.tDiffuse1.value = this.scene1.getTexture()
 
         this.scene2.clearColor = 0xf2e9e4
         this.scene2.render(true)
         this.scene2.update(time)
-        this.quad.material.uniforms.tDiffuse2.value = this.scene2.fbo.texture
+        this.quad.material.uniforms.tDiffuse2.value = this.scene2.getTexture()
 
         // // Uncomment the next lines to see the quad with the two scenes
         // // and don't render anything else after this
         // this.renderer.setRenderTarget(null)
         // this.renderer.clear()
-        // this.renderer.render(this.quad, this.camera) // straight render the mesh instead of a scene
+        // this.renderer.render(this.quad, this.camera) // render the mesh instead of a scene
 
         // Render the quad with the scenes to another render target
         this.renderer.setRenderTarget(this.target)
