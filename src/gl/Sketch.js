@@ -79,13 +79,13 @@ class Sketch {
 
         this.scene1.clearColor = 0xc9ada7
         this.scene1.render(true)
-        this.quad.material.uniforms.tDiffuse1.value = this.scene1.fbo.texture
         this.scene1.update(time)
+        this.quad.material.uniforms.tDiffuse1.value = this.scene1.fbo.texture
 
         this.scene2.clearColor = 0xf2e9e4
         this.scene2.render(true)
-        this.quad.material.uniforms.tDiffuse2.value = this.scene2.fbo.texture
         this.scene2.update(time)
+        this.quad.material.uniforms.tDiffuse2.value = this.scene2.fbo.texture
 
         this.renderer.setRenderTarget(null)
         this.renderer.clear()
